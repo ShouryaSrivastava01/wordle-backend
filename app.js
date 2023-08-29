@@ -17,7 +17,6 @@ const app=express()
 // }
 // )
 
-const hostname= process.env.BASE_URL
 const port  = process.env.PORT || 3002
 
 app.get('/', (req,res)=>{
@@ -105,6 +104,6 @@ app.get('/', (req,res)=>{
 
 
 
-app.listen(port, hostname, ()=>{
-    console.log(`listening at http://${hostname}:${port}`)
+app.listen(port, ()=>{
+    console.log(`listening at port ${port}`)
 })
