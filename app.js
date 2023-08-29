@@ -21,7 +21,7 @@ mongoose.connect(uri,
 
 const port  = process.env.PORT || 3002
 
-const allowedOrigins = ['http://127.0.0.1:3001','http://localhost:3001'];
+const allowedOrigins = ['http://127.0.0.1:3001','http://localhost:3001','https://techwordle.netlify.app'];
 
 // Configure CORS
 app.use(cors({
