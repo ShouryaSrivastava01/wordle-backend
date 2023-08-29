@@ -3,6 +3,7 @@ const express=require('express')
 const app=express()
 const bodyParser=require('body-parser')
 const jsonParser=bodyParser.json()
+const cors = require('cors')
 // const fs=require('fs')
 // const Customer = require('./schema');
 // const Partner = require('./schema copy')
@@ -20,30 +21,23 @@ mongoose.connect(uri,
 
 const port  = process.env.PORT || 3002
 
+const allowedOrigins = ['http://127.0.0.1:3001','http://localhost:3001'];
+
+// Configure CORS
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
+
 app.get('/', (req,res)=>{
     res.send("hello world");
 })
 
-
-app.get('/word', jsonParser, (req,res)=>{
-    var name;
-    console.log(req.body.name)
-      const data= new Customer({
-          _id: new mongoose.Types.ObjectId(),
-          name: req.body.name,
-        email: req.body.email,
-         password: req.body.password,
-         walletAddress : "",
-         orders : []
-          
-      })
-      data.save().then(result=>{
-          res.status(201).json(result)
-          console.log(result)
-          name = result.name;
-      }).catch(err=>res.status(500))
-      
-  })
 
 //   app.post('/register-partner', jsonParser, (req,res)=>{
 //     var name;
@@ -60,16 +54,16 @@ app.get('/word', jsonParser, (req,res)=>{
 //       }).catch(err=>res.status(500))
       
 //   })
-app.get('/words', jsonParser, (req, res) => {
-    Word.findOne({ _id: req.body._id }).then(word => { // Change 'res' to 'word'
+app.post('/words', jsonParser, (req, res) => {
+    Word.findOne({ _id: req.body._id }).then(word => { 
       if (word) {
-        res.status(200).json(word.words); // Changed status to 200 for a successful request
+        res.status(200).json(word.words);
       } else {
-        res.status(404).json({ message: 'Word not found' }); // Handle the case where the word is not found
+        res.status(404).json({ message: 'Word not found' }); 
       }
     }).catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'Internal server error' }); // Handle other errors
+      res.status(500).json({ error: 'Internal server error' }); 
     });
   });
   
